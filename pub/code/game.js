@@ -41,26 +41,100 @@ var bootState = {
     }
 };
 
+var map;
+var layer;
+var cursors;
+var player;
+
 var gameState = {
 
     text: undefined,
 
     create: function () {
 
-        var text = gameState.text = game.add.text(game.world.centerX, game.world.centerY, "The game will start\nNOW!");
-        text.anchor.setTo(0.5);
-        text.font = fontName;
-        text.fontSize = 20;
-        text.fill = colors.normalStroke;
-        text.align = 'center';
+        //var text = gameState.text = game.add.text(game.world.centerX, game.world.centerY, "The game will start\nNOW!");
+        //text.anchor.setTo(0.5);
+        //text.font = fontName;
+        //text.fontSize = 20;
+        //text.fill = colors.normalStroke;
+        //text.align = 'center';
+
+    //  Because we're loading CSV map data we have to specify the tile size here or we can't render it
+    map = game.add.tilemap('map', 16, 16);
+
+    //  Now add in the tileset
+    map.addTilesetImage('tiles');
+
+    //  Create our layer
+    layer = map.createLayer(0);
+
+    //  Resize the world
+    layer.resizeWorld();
+
+    //  This isn't totally accurate, but it'll do for now
+    map.setCollisionBetween(54, 83);
+
+    //  Un-comment this on to see the collision tiles
+    //layer.debug = true;
+
+    //  Player
+    player = game.add.sprite(48, 48, 'player', 1);
+    player.animations.add('left', [8,9], 10, true);
+    player.animations.add('right', [1,2], 10, true);
+    player.animations.add('up', [11,12,13], 10, true);
+    player.animations.add('down', [4,5,6], 10, true);
+
+    game.physics.enable(player, Phaser.Physics.ARCADE);
+
+    player.body.setSize(10, 14, 2, 1);
+
+    game.camera.follow(player);
+
+    cursors = game.input.keyboard.createCursorKeys();
+
+    var help = game.add.text(16, 16, 'Arrows to move', { font: '14px Arial', fill: '#ffffff' });
+    help.fixedToCamera = true;
+
+    },
+
+    update: function () {
+
+    game.physics.arcade.collide(player, layer);
+
+    player.body.velocity.set(0);
+
+    if (cursors.left.isDown)
+    {
+        player.body.velocity.x = -100;
+        player.play('left');
+    }
+    else if (cursors.right.isDown)
+    {
+        player.body.velocity.x = 100;
+        player.play('right');
+    }
+    else if (cursors.up.isDown)
+    {
+        player.body.velocity.y = -100;
+        player.play('up');
+    }
+    else if (cursors.down.isDown)
+    {
+        player.body.velocity.y = 100;
+        player.play('down');
+    }
+    else
+    {
+        player.animations.stop();
+    }
 
     },
 
     resize: function () {
 
-        var text = gameState.text;
-        text.x = game.world.centerX;
-        text.y = game.world.centerY;
+        //var text = gameState.text;
+        //text.x = game.world.centerX;
+        //text.y = game.world.centerY;
 
     },
 
@@ -83,7 +157,9 @@ var loadState = {
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         //game.load.image('square', 'assets/sprites/square.png');
         //game.load.audio('sfx', 'assets/sounds/fx_mixdown.mp3');
-
+        game.load.tilemap('map', 'assets/tilemaps/csv/level2.csv', null, Phaser.Tilemap.CSV);
+        game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
+        game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
     },
 
     create: function () {
@@ -176,7 +252,7 @@ var splashState = {
 
     create: function () {
 
-        var text = splashState.text = game.add.text(game.world.centerX, game.world.centerY, "Somewhere in space...");
+        var text = splashState.text = game.add.text(game.world.centerX, game.world.centerY, "Once upon a night...");
         text.anchor.setTo(0.5);
 
         text.font = fontName;
@@ -213,13 +289,16 @@ var game;
 var gameData;
 
 var fontName = 'monospace';
-var googleFontName = 'Inconsolata';
+var googleFontName = 'UnifrakturMaguntia';
 
 var fx;
 window.PhaserGlobal = { disableWebAudio: true };
 
-var colors = {normalBG: '#2c3e50', normalStroke: '#ecf0f1'};
-var tints = {normalBG: 0x2c3e50, normalStroke: 0xecf0f1};
+// http://www.colourlovers.com/palette/164182/Octobers_End
+// ash: b9b68e, pumpkin: c98c30, orange: c95b30, purple: 80649b, dark-grey: 3e3d41
+
+var colors = {normalBG: '#3e3d41', normalStroke: '#b9b68e'};
+var tints = {normalBG: 0x3e3d41, normalStroke: 0xb9b68e};
 
 WebFontConfig = {
     active: function() { fontName = googleFontName; },

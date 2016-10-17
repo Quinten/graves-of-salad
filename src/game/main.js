@@ -3,13 +3,16 @@ var game;
 var gameData;
 
 var fontName = 'monospace';
-var googleFontName = 'Inconsolata';
+var googleFontName = 'UnifrakturMaguntia';
 
 var fx;
 window.PhaserGlobal = { disableWebAudio: true };
 
-var colors = {normalBG: '#2c3e50', normalStroke: '#ecf0f1'};
-var tints = {normalBG: 0x2c3e50, normalStroke: 0xecf0f1};
+// http://www.colourlovers.com/palette/164182/Octobers_End
+// ash: b9b68e, pumpkin: c98c30, orange: c95b30, purple: 80649b, dark-grey: 3e3d41
+
+var colors = {normalBG: '#3e3d41', normalStroke: '#b9b68e'};
+var tints = {normalBG: 0x3e3d41, normalStroke: 0xb9b68e};
 
 WebFontConfig = {
     active: function() { fontName = googleFontName; },

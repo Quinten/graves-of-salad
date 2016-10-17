@@ -9,7 +9,9 @@ var loadState = {
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         //game.load.image('square', 'assets/sprites/square.png');
         //game.load.audio('sfx', 'assets/sounds/fx_mixdown.mp3');
-
+        game.load.tilemap('map', 'assets/tilemaps/csv/level2.csv', null, Phaser.Tilemap.CSV);
+        game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
+        game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
     },
 
     create: function () {
