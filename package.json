@@ -1,10 +1,10 @@
 {
-  "name": "phaser-base",
+  "name": "graves-of-salad",
   "version": "0.0.1",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Quinten/phaser-base.git"
+    "url": "git@github.com:Quinten/graves-of-salad.git"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
