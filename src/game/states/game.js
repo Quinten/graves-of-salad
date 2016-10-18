@@ -34,7 +34,7 @@ var gameState = {
 
         game.physics.enable(player, Phaser.Physics.ARCADE);
 
-        player.body.setSize(10, 14, 2, 1);
+        player.body.setSize(10, 10, 2, 2);
 
         game.camera.follow(player);
 
