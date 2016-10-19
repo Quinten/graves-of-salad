@@ -69,7 +69,8 @@ var gameState = {
         //layer.debug = true;
 
         //  Player
-        player = game.add.sprite(48, 48, 'player', 1);
+        //player = game.add.sprite(48, 48, 'player', 1);
+        player = game.add.sprite(48, 48, 'enemy', 1);
         player.animations.add('left', [8,9], 10, true);
         player.animations.add('right', [1,2], 10, true);
         player.animations.add('up', [11,12,13], 10, true);
@@ -133,6 +134,7 @@ var loadState = {
         game.load.tilemap('map', 'assets/tilemaps/csv/graves.csv', null, Phaser.Tilemap.CSV);
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
+        game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
     },
 
     create: function () {
