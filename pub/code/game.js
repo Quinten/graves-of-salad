@@ -270,8 +270,8 @@ window.PhaserGlobal = { disableWebAudio: true };
 // http://www.colourlovers.com/palette/164182/Octobers_End
 // ash: b9b68e, pumpkin: c98c30, orange: c95b30, purple: 80649b, dark-grey: 3e3d41
 
-var colors = {normalBG: '#3e3d41', normalStroke: '#b9b68e'};
-var tints = {normalBG: 0x3e3d41, normalStroke: 0xb9b68e};
+var colors = {normalBG: '#131822', normalStroke: '#31453e'};
+var tints = {normalBG: 0x131822, normalStroke: 0x31453e};
 
 WebFontConfig = {
     active: function() { fontName = googleFontName; },
