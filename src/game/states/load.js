@@ -12,6 +12,7 @@ var loadState = {
         game.load.tilemap('map', 'assets/tilemaps/csv/graves.csv', null, Phaser.Tilemap.CSV);
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
+        game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
     },
 
     create: function () {
