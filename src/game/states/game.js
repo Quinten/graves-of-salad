@@ -6,6 +6,7 @@ var gameState = {
     player: undefined,
     enemies: undefined,
     pathfinding: undefined,
+    emitter: undefined,
 
     create: function () {
 
@@ -49,6 +50,14 @@ var gameState = {
 
         this.cursors = game.input.keyboard.createCursorKeys();
 
+        this.emitter = game.add.emitter(this.player.position.x, this.player.position.y, 200);
+        this.emitter.makeParticles('redgibs', [0,1,2,3,4], 200, true, true);
+        this.emitter.minParticleSpeed.setTo(-200, -300);
+        this.emitter.maxParticleSpeed.setTo(200, -400);
+        this.emitter.gravity = 150;
+        this.emitter.bounce.setTo(0.5, 0.5);
+        this.emitter.angularDrag = 30;
+
         //  Enemies
         this.enemies = [];
 
@@ -69,6 +78,8 @@ var gameState = {
     },
 
     update: function () {
+
+        game.physics.arcade.collide(this.emitter, this.layer);
 
         game.physics.arcade.collide(this.player, this.layer);
 
@@ -149,6 +160,8 @@ var gameState = {
                     enemy.animations.stop();
                 }
             }
+
+            game.physics.arcade.collide(enemy, this.player, this.enemyPlayerCollide, null, this);
         }
 
     },
@@ -175,6 +188,12 @@ var gameState = {
         }
     },
 
+    enemyPlayerCollide: function () {
+        this.emitter.x = this.player.x;
+        this.emitter.y = this.player.y;
+        this.emitter.start(true, 2000, null, 20);
+    },
+
     resize: function () {
 
     },
@@ -186,6 +205,7 @@ var gameState = {
         this.cursors = undefined;
         this.player = undefined;
         this.enemies = undefined;
+        this.emitter = undefined;
 
     }
 
