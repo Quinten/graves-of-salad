@@ -46,6 +46,9 @@ var gameState = {
         game.physics.enable(this.player, Phaser.Physics.ARCADE);
         this.player.body.setSize(10, 10, 2, 2);
 
+        console.log(this.player.health);
+        this.player.events.onKilled.add(this.playerKilled, this);
+
         game.camera.follow(this.player);
 
         this.cursors = game.input.keyboard.createCursorKeys();
@@ -71,7 +74,7 @@ var gameState = {
         enemy.body.setSize(10, 10, 2, 2);
         enemy.anchor.setTo(0.5,0.5);
 
-        enemy.pathfinding = {path: [], path_step: -1, searching: false, walkspeed: gameData.settings.enemies.walkspeed};
+        enemy.pathfinding = {path: [], path_step: -1, searching: false, walkspeed: gameData.settings.enemies.walkspeed, damage: gameData.settings.enemies.damage};
 
         this.enemies.push(enemy);
 
@@ -188,10 +191,19 @@ var gameState = {
         }
     },
 
-    enemyPlayerCollide: function () {
+    enemyPlayerCollide: function (enemy, player) {
+        player.health -= enemy.pathfinding.damage;
+        console.log(player.health);
+        if (player.health < 0) {
+            player.kill();
+        }
+    },
+
+    playerKilled: function () {
         this.emitter.x = this.player.x;
         this.emitter.y = this.player.y;
-        this.emitter.start(true, 2000, null, 20);
+        this.emitter.start(true, 4000, null, 40);
+        game.camera.shake(0.05, 500);
     },
 
     resize: function () {

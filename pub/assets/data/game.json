@@ -1,25 +1,10 @@
 {
-    "menu": {
-
-        "titles": [
-
-            "Graves od Salad",
-            "huppeldepup"
-
-        ],
-
-        "buttons": [
-
-            "start"
-
-        ]
-    },
-
     "settings": {
 
         "enemies": {
 
-            "walkspeed": 50
+            "walkspeed": 50,
+            "damage": 0.01
         }
     }
 }
