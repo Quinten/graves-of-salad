@@ -3,7 +3,7 @@
 
         "enemies": {
 
-            "walkspeed": 50,
+            "walkspeed": 80,
             "damage": 0.01
         }
     }
