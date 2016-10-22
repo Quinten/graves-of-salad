@@ -5,6 +5,8 @@ var gameData;
 var fontName = 'monospace';
 var googleFontName = 'UnifrakturMaguntia';
 
+var music;
+
 var fx;
 window.PhaserGlobal = { disableWebAudio: true };
 
