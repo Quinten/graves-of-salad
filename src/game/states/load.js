@@ -13,8 +13,9 @@ var loadState = {
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
         game.load.spritesheet('redgibs', 'assets/sprites/redgibs.png', 6, 6);
-        game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
+        game.load.image('bullet', 'assets/sprites/bullet.png');
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
+        game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
     },
 
     create: function () {

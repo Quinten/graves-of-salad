@@ -129,6 +129,9 @@ var gameState = {
     pathfinding: undefined,
     emitter: undefined,
     enemyEmitter: undefined,
+    bullets: undefined,
+    fireRate: undefined,
+    nextFire: undefined,
 
     create: function () {
 
@@ -159,14 +162,16 @@ var gameState = {
         this.pathfinding = this.game.plugins.add(Pathfinding, this.map.layers[0].data, walkableTiles, tile_dimensions);
 
         //  Player
-        this.player = game.add.sprite(48, 48, 'player', 1);
+        this.player = game.add.sprite(56, 56, 'player', 1);
         this.player.animations.add('left', [8,9], 10, true);
         this.player.animations.add('right', [1,2], 10, true);
         this.player.animations.add('up', [11,12,13], 10, true);
         this.player.animations.add('down', [4,5,6], 10, true);
+        this.player.facing = 'right';
 
         game.physics.enable(this.player, Phaser.Physics.ARCADE);
         this.player.body.setSize(10, 10, 2, 2);
+        this.player.anchor.setTo(0.5,0.5);
 
         //console.log(this.player.health);
         this.player.events.onKilled.add(this.playerKilled, this);
@@ -174,6 +179,25 @@ var gameState = {
         game.camera.follow(this.player);
 
         this.cursors = game.input.keyboard.createCursorKeys();
+
+        //  Our bullet group
+        this.bullets = game.add.group();
+        this.bullets.enableBody = true;
+        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.bullets.createMultiple(30, 'bullet', 0, false);
+        this.bullets.setAll('anchor.x', 0.5);
+        this.bullets.setAll('anchor.y', 0.5);
+        this.bullets.setAll('outOfBoundsKill', true);
+        this.bullets.setAll('checkWorldBounds', true);
+
+        this.fireRate = 100;
+        this.nextFire = 0;
+
+        //  Register the space key.
+        this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+        //  Stop the following key from propagating up to the browser
+        game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
         this.emitter = game.add.emitter(this.player.position.x, this.player.position.y, 200);
         this.emitter.makeParticles('redgibs', [0,1,2,3,4], 200, true, true);
@@ -224,6 +248,7 @@ var gameState = {
 
         game.physics.arcade.collide(this.emitter, this.layer);
         game.physics.arcade.collide(this.enemyEmitter, this.layer);
+        game.physics.arcade.collide(this.bullets, this.layer, this.bulletsMapCollide, null, this);
 
         game.physics.arcade.collide(this.player, this.layer);
 
@@ -232,17 +257,51 @@ var gameState = {
         if (this.cursors.left.isDown) {
             this.player.body.velocity.x = -100;
             this.player.play('left');
+            this.player.facing = 'left';
         } else if (this.cursors.right.isDown) {
             this.player.body.velocity.x = 100;
             this.player.play('right');
+            this.player.facing = 'right';
         } else if (this.cursors.up.isDown) {
             this.player.body.velocity.y = -100;
             this.player.play('up');
+            this.player.facing = 'up';
         } else if (this.cursors.down.isDown) {
             this.player.body.velocity.y = 100;
             this.player.play('down');
+            this.player.facing = 'down';
         } else {
             this.player.animations.stop();
+        }
+
+        if (this.player.alive && this.spaceKey.isDown) {
+            if (game.time.now > this.nextFire && this.bullets.countDead() > 0)
+            {
+                this.nextFire = game.time.now + this.fireRate;
+
+                var bullet = this.bullets.getFirstExists(false);
+
+                bullet.reset(this.player.x, this.player.y);
+
+                switch (this.player.facing) {
+                    case 'left':
+                        bullet.angle = 180;
+                        game.physics.arcade.moveToXY(bullet, 0, this.player.y, 1000);
+                        break;
+                    case 'right':
+                        bullet.angle = 0;
+                        game.physics.arcade.moveToXY(bullet, 2048, this.player.y, 1000);
+                        break;
+                    case 'up':
+                        bullet.angle = -90;
+                        game.physics.arcade.moveToXY(bullet, this.player.x, 0, 1000);
+                        break;
+                    case 'down':
+                        bullet.angle = 90;
+                        game.physics.arcade.moveToXY(bullet, this.player.x, 2048, 1000);
+                        break;
+                }
+            }
         }
 
         for (var e = 0; e < this.enemies.length; e++) {
@@ -313,6 +372,8 @@ var gameState = {
                     game.physics.arcade.collide(enemy, enemyB, this.enemyEnemyCollide, null, this);
                 }
             }
+
+            game.physics.arcade.collide(enemy, this.bullets, this.enemyBulletCollide, null, this);
         }
     },
 
@@ -346,11 +407,32 @@ var gameState = {
         }
     },
 
+    enemyBulletCollide: function (enemy, bullet) {
+        bullet.kill();
+        // todo: needs refactoring
+        enemy.health -= 0.1;
+        if (enemy.health <= 0.2) {
+            this.enemyEmitter.x = enemy.x;
+            this.enemyEmitter.y = enemy.y;
+            this.enemyEmitter.start(true, 8000, null, 40);
+            game.camera.shake(0.05, 500);
+            enemy.health = 1;
+            enemy.body.x = enemy.pathfinding.spawnpoint.x;
+            enemy.body.y = enemy.pathfinding.spawnpoint.y;
+            enemy.pathfinding.path = [];
+            enemy.pathfinding.path_step = -1;
+            enemy.body.velocity.x = 0;
+            enemy.body.velocity.y = 0;
+        }
+    },
+
     enemyEnemyCollide: function (enemyA, enemyB) {
+        // todo: needs refactoring
         this.enemyEmitter.x = enemyA.x;
         this.enemyEmitter.y = enemyA.y;
         this.enemyEmitter.start(true, 8000, null, 40);
         game.camera.shake(0.05, 500);
+        enemyA.health = 1;
         enemyA.body.x = enemyA.pathfinding.spawnpoint.x;
         enemyA.body.y = enemyA.pathfinding.spawnpoint.y;
         enemyA.pathfinding.path = [];
@@ -366,6 +448,10 @@ var gameState = {
         game.camera.shake(0.05, 500);
     },
 
+    bulletsMapCollide: function (bullet, map) {
+        bullet.kill();
+    },
+
     resize: function () {
 
     },
@@ -379,6 +465,9 @@ var gameState = {
         this.enemies = undefined;
         this.emitter = undefined;
         this.enemyEmitter = undefined;
+        this.bullets = undefined;
+        this.fireRate = undefined;
+        this.nextFire = undefined;
 
     }
 
@@ -399,8 +488,9 @@ var loadState = {
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
         game.load.spritesheet('redgibs', 'assets/sprites/redgibs.png', 6, 6);
-        game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
+        game.load.image('bullet', 'assets/sprites/bullet.png');
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
+        game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
     },
 
     create: function () {
