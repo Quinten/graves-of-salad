@@ -7,6 +7,7 @@ var gameState = {
     enemies: undefined,
     pathfinding: undefined,
     emitter: undefined,
+    enemyEmitter: undefined,
 
     create: function () {
 
@@ -46,7 +47,7 @@ var gameState = {
         game.physics.enable(this.player, Phaser.Physics.ARCADE);
         this.player.body.setSize(10, 10, 2, 2);
 
-        console.log(this.player.health);
+        //console.log(this.player.health);
         this.player.events.onKilled.add(this.playerKilled, this);
 
         game.camera.follow(this.player);
@@ -64,25 +65,44 @@ var gameState = {
         //  Enemies
         this.enemies = [];
 
-        var enemy = game.add.sprite(2000, 2000, 'enemy', 1);
-        enemy.animations.add('left', [8,9], 10, true);
-        enemy.animations.add('right', [1,2], 10, true);
-        enemy.animations.add('up', [11,12,13], 10, true);
-        enemy.animations.add('down', [4,5,6], 10, true);
+        for (var e = 0; e < gameData.settings.enemies.spawnpoints.length; e++) {
+            var spawnpoint = gameData.settings.enemies.spawnpoints[e];
+            var enemy = game.add.sprite(spawnpoint.x, spawnpoint.y, 'enemy', 1);
+            enemy.animations.add('left', [8,9], 10, true);
+            enemy.animations.add('right', [1,2], 10, true);
+            enemy.animations.add('up', [11,12,13], 10, true);
+            enemy.animations.add('down', [4,5,6], 10, true);
 
-        game.physics.enable(enemy, Phaser.Physics.ARCADE);
-        enemy.body.setSize(10, 10, 2, 2);
-        enemy.anchor.setTo(0.5,0.5);
+            game.physics.enable(enemy, Phaser.Physics.ARCADE);
+            enemy.body.setSize(10, 10, 2, 2);
+            enemy.anchor.setTo(0.5,0.5);
 
-        enemy.pathfinding = {path: [], path_step: -1, searching: false, walkspeed: gameData.settings.enemies.walkspeed, damage: gameData.settings.enemies.damage};
+            enemy.pathfinding = {
+                path: [],
+                path_step: -1,
+                searching: false,
+                walkspeed: gameData.settings.enemies.walkspeed,
+                damage: gameData.settings.enemies.damage,
+                spawnpoint: {x: spawnpoint.x, y: spawnpoint.y}
+            };
 
-        this.enemies.push(enemy);
+            this.enemies.push(enemy);
+        }
+
+        this.enemyEmitter = game.add.emitter(this.player.position.x, this.player.position.y, 200);
+        this.enemyEmitter.makeParticles('greengibs', [0,1,2,3,4], 200, true, true);
+        this.enemyEmitter.minParticleSpeed.setTo(-200, -300);
+        this.enemyEmitter.maxParticleSpeed.setTo(200, -400);
+        this.enemyEmitter.gravity = 150;
+        this.enemyEmitter.bounce.setTo(0.5, 0.5);
+        this.enemyEmitter.angularDrag = 30;
 
     },
 
     update: function () {
 
         game.physics.arcade.collide(this.emitter, this.layer);
+        game.physics.arcade.collide(this.enemyEmitter, this.layer);
 
         game.physics.arcade.collide(this.player, this.layer);
 
@@ -165,8 +185,14 @@ var gameState = {
             }
 
             game.physics.arcade.collide(enemy, this.player, this.enemyPlayerCollide, null, this);
-        }
 
+            for (var b = 0; b < this.enemies.length; b++) {
+                var enemyB = this.enemies[b];
+                if (enemy !== enemyB) {
+                    game.physics.arcade.collide(enemy, enemyB, this.enemyEnemyCollide, null, this);
+                }
+            }
+        }
     },
 
     enemy_reached_target_position: function (enemy, position) {
@@ -199,10 +225,23 @@ var gameState = {
         }
     },
 
+    enemyEnemyCollide: function (enemyA, enemyB) {
+        this.enemyEmitter.x = enemyA.x;
+        this.enemyEmitter.y = enemyA.y;
+        this.enemyEmitter.start(true, 8000, null, 40);
+        game.camera.shake(0.05, 500);
+        enemyA.body.x = enemyA.pathfinding.spawnpoint.x;
+        enemyA.body.y = enemyA.pathfinding.spawnpoint.y;
+        enemyA.pathfinding.path = [];
+        enemyA.pathfinding.path_step = -1;
+        enemyA.body.velocity.x = 0;
+        enemyA.body.velocity.y = 0;
+    },
+
     playerKilled: function () {
         this.emitter.x = this.player.x;
         this.emitter.y = this.player.y;
-        this.emitter.start(true, 4000, null, 40);
+        this.emitter.start(true, 8000, null, 40);
         game.camera.shake(0.05, 500);
     },
 
@@ -218,6 +257,7 @@ var gameState = {
         this.player = undefined;
         this.enemies = undefined;
         this.emitter = undefined;
+        this.enemyEmitter = undefined;
 
     }
 
