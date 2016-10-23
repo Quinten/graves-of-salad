@@ -121,6 +121,7 @@ var bootState = {
 
 var gameState = {
 
+    text: undefined,
     map: undefined,
     layer: undefined,
     cursors: undefined,
@@ -242,6 +243,19 @@ var gameState = {
         this.enemyEmitter.bounce.setTo(0.5, 0.5);
         this.enemyEmitter.angularDrag = 30;
 
+        var text = this.text = game.add.text(game.camera.width / 2, (game.camera.height / 2) - 48, "Arrow keys to move");
+        text.anchor.setTo(0.5,0.5);
+        text.font = fontName;
+        text.fontSize = 32;
+        text.fill = '#80649b';
+        text.align = 'center';
+        text.fixedToCamera = true;
+
+        this.usedCursors = false;
+        this.usedSpacebar = false;
+        this.hiddenCursorInfo = false;
+        this.hiddenSpacebarInfo = false;
+
     },
 
     update: function () {
@@ -258,20 +272,35 @@ var gameState = {
             this.player.body.velocity.x = -100;
             this.player.play('left');
             this.player.facing = 'left';
+            this.usedCursors = true;
         } else if (this.cursors.right.isDown) {
             this.player.body.velocity.x = 100;
             this.player.play('right');
             this.player.facing = 'right';
+            this.usedCursors = true;
         } else if (this.cursors.up.isDown) {
             this.player.body.velocity.y = -100;
             this.player.play('up');
             this.player.facing = 'up';
+            this.usedCursors = true;
         } else if (this.cursors.down.isDown) {
             this.player.body.velocity.y = 100;
             this.player.play('down');
             this.player.facing = 'down';
+            this.usedCursors = true;
         } else {
             this.player.animations.stop();
+        }
+
+        if (this.usedCursors && !this.hiddenCursorInfo) {
+            this.text.visible = false;
+            this.hiddenCursorInfo = true;
+            game.time.events.add(Phaser.Timer.SECOND * 8, function () {
+                this.text.fill = '#f7a506';
+                this.text.text = 'Hit space to shoot';
+                this.text.visible = true;
+                this.hiddenSpacebarInfo = false;
+            }, this);
         }
 
         if (this.player.alive && this.spaceKey.isDown) {
@@ -302,7 +331,14 @@ var gameState = {
                         break;
                 }
                 fx.play('bullet');
+
+                this.usedSpacebar = true;
             }
+        }
+
+        if (this.usedSpacebar && !this.hiddenSpacebarInfo) {
+            this.text.visible = false;
+            this.hiddenSpacebarInfo = true;
         }
 
         for (var e = 0; e < this.enemies.length; e++) {
@@ -458,10 +494,15 @@ var gameState = {
 
     resize: function () {
 
+        var text = this.text;
+        text.x = (game.camera.width / 2) - 48;
+        text.y = game.camera.height / 2;
+
     },
 
     shutdown: function () {
 
+        this.text = undefined;
         this.map = undefined;
         this.layer = undefined;
         this.cursors = undefined;
