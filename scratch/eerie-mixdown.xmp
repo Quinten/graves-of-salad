@@ -12,10 +12,10 @@
             xmlns:xmpDM="http://ns.adobe.com/xmp/1.0/DynamicMedia/">
          <xmp:CreatorTool>Adobe Audition CC 2015.2 (Macintosh)</xmp:CreatorTool>
          <xmp:CreateDate>2016-10-22T21:56:17+02:00</xmp:CreateDate>
-         <xmp:MetadataDate>2016-10-22T22:12:41+02:00</xmp:MetadataDate>
-         <xmp:ModifyDate>2016-10-22T22:12:41+02:00</xmp:ModifyDate>
-         <xmpMM:InstanceID>xmp.iid:d9c9e4a9-a5a1-4611-b20e-83f917f91049</xmpMM:InstanceID>
-         <xmpMM:DocumentID>xmp.did:d9c9e4a9-a5a1-4611-b20e-83f917f91049</xmpMM:DocumentID>
+         <xmp:MetadataDate>2016-10-23T13:02:58+02:00</xmp:MetadataDate>
+         <xmp:ModifyDate>2016-10-23T13:02:58+02:00</xmp:ModifyDate>
+         <xmpMM:InstanceID>xmp.iid:57ff6fbf-a18c-4deb-b11f-e718d898bb28</xmpMM:InstanceID>
+         <xmpMM:DocumentID>xmp.did:57ff6fbf-a18c-4deb-b11f-e718d898bb28</xmpMM:DocumentID>
          <xmpMM:OriginalDocumentID>xmp.did:5717458c-028c-4304-8b59-2946af6f377c</xmpMM:OriginalDocumentID>
          <xmpMM:History>
             <rdf:Seq>
@@ -84,15 +84,71 @@
                </rdf:li>
                <rdf:li rdf:parseType="Resource">
                   <stEvt:action>saved</stEvt:action>
-                  <stEvt:instanceID>xmp.iid:2020daa4-3df7-43c3-8419-06dddbe44fca</stEvt:instanceID>
-                  <stEvt:when>2016-10-22T22:12:41+02:00</stEvt:when>
+                  <stEvt:instanceID>xmp.iid:cc9aef42-25bd-495e-8c49-427ff9eca2b9</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T12:57:56+02:00</stEvt:when>
                   <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
                   <stEvt:changed>/metadata</stEvt:changed>
                </rdf:li>
                <rdf:li rdf:parseType="Resource">
                   <stEvt:action>saved</stEvt:action>
-                  <stEvt:instanceID>xmp.iid:b241b984-585c-48eb-86df-93dc2a04d849</stEvt:instanceID>
-                  <stEvt:when>2016-10-22T22:12:41+02:00</stEvt:when>
+                  <stEvt:instanceID>xmp.iid:93d498fc-cf95-47d0-804b-3a48bd2f9511</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T12:57:56+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:19f5c857-255d-4594-89ac-5fdf0dc804c5</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T12:57:56+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/metadata</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:d63f1dd1-74cc-492d-b1f4-ec9a0ac9ca30</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T12:57:56+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:0a4bf1d0-adf1-48ae-b889-39f22503c178</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T13:00:15+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/metadata</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:3eb309ce-bbf7-4ab8-a310-986f4fc18ccf</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T13:00:15+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:6ec4072e-1197-45c6-b733-a7a6407d32ee</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T13:01:42+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/metadata</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:8d459fd4-7a6f-436f-a201-a4f5cbb5f426</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T13:01:42+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:de22813b-62d5-4222-b164-fbd319887fed</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T13:02:58+02:00</stEvt:when>
+                  <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
+                  <stEvt:changed>/metadata</stEvt:changed>
+               </rdf:li>
+               <rdf:li rdf:parseType="Resource">
+                  <stEvt:action>saved</stEvt:action>
+                  <stEvt:instanceID>xmp.iid:f05c26d3-2ea9-45e6-9e39-57a466425d9e</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T13:02:58+02:00</stEvt:when>
                   <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
                   <stEvt:changed>/metadata</stEvt:changed>
                </rdf:li>
@@ -102,8 +158,8 @@
                </rdf:li>
                <rdf:li rdf:parseType="Resource">
                   <stEvt:action>saved</stEvt:action>
-                  <stEvt:instanceID>xmp.iid:a54f8fb3-6607-42f0-b83d-5cc106b394eb</stEvt:instanceID>
-                  <stEvt:when>2016-10-22T22:12:41+02:00</stEvt:when>
+                  <stEvt:instanceID>xmp.iid:c0dd9793-29f9-45d0-bd53-89af5fc1dc31</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T13:02:58+02:00</stEvt:when>
                   <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
                </rdf:li>
                <rdf:li rdf:parseType="Resource">
@@ -112,21 +168,21 @@
                </rdf:li>
                <rdf:li rdf:parseType="Resource">
                   <stEvt:action>saved</stEvt:action>
-                  <stEvt:instanceID>xmp.iid:d9c9e4a9-a5a1-4611-b20e-83f917f91049</stEvt:instanceID>
-                  <stEvt:when>2016-10-22T22:12:41+02:00</stEvt:when>
+                  <stEvt:instanceID>xmp.iid:57ff6fbf-a18c-4deb-b11f-e718d898bb28</stEvt:instanceID>
+                  <stEvt:when>2016-10-23T13:02:58+02:00</stEvt:when>
                   <stEvt:softwareAgent>Adobe Audition CC 2015.2 (Macintosh)</stEvt:softwareAgent>
                   <stEvt:changed>/</stEvt:changed>
                </rdf:li>
             </rdf:Seq>
          </xmpMM:History>
          <xmpMM:DerivedFrom rdf:parseType="Resource">
-            <stRef:instanceID>xmp.iid:a54f8fb3-6607-42f0-b83d-5cc106b394eb</stRef:instanceID>
-            <stRef:documentID>xmp.did:a54f8fb3-6607-42f0-b83d-5cc106b394eb</stRef:documentID>
+            <stRef:instanceID>xmp.iid:c0dd9793-29f9-45d0-bd53-89af5fc1dc31</stRef:instanceID>
+            <stRef:documentID>xmp.did:c0dd9793-29f9-45d0-bd53-89af5fc1dc31</stRef:documentID>
             <stRef:originalDocumentID>xmp.did:5717458c-028c-4304-8b59-2946af6f377c</stRef:originalDocumentID>
          </xmpMM:DerivedFrom>
          <dc:format>audio/ogg; codec="vorbis"</dc:format>
-         <bext:originationDate>2016-10-22</bext:originationDate>
-         <bext:originationTime>22:12:41</bext:originationTime>
+         <bext:originationDate>2016-10-23</bext:originationDate>
+         <bext:originationTime>13:02:58</bext:originationTime>
          <bext:timeReference>0</bext:timeReference>
          <creatorAtom:windowsAtom rdf:parseType="Resource">
             <creatorAtom:extension>.sesx</creatorAtom:extension>
