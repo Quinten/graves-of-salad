@@ -243,7 +243,7 @@ var gameState = {
         this.enemyEmitter.bounce.setTo(0.5, 0.5);
         this.enemyEmitter.angularDrag = 30;
 
-        var text = this.text = game.add.text(game.camera.width / 2, (game.camera.height / 2) - 48, "Arrow keys to move");
+        var text = this.text = game.add.text(game.camera.width / 2, (game.camera.height / 2) - 48, "Arrows to move");
         text.anchor.setTo(0.5,0.5);
         text.font = fontName;
         text.fontSize = 32;
@@ -297,7 +297,7 @@ var gameState = {
             this.hiddenCursorInfo = true;
             game.time.events.add(Phaser.Timer.SECOND * 8, function () {
                 this.text.fill = '#f7a506';
-                this.text.text = 'Hit space to shoot';
+                this.text.text = 'Space to shoot';
                 this.text.visible = true;
                 this.hiddenSpacebarInfo = false;
             }, this);
@@ -584,7 +584,7 @@ var menuState = {
         this.menuGroup.x = game.world.centerX;
         this.menuGroup.y = game.world.centerY;
 
-        var textsprite = this.menuGroup.add(this.createText(0, -80, 'Ready?\nHit spacebar'));
+        var textsprite = this.menuGroup.add(this.createText(0, -80, 'Graves of salad\npress space'));
 
         //  Register the key.
         this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);

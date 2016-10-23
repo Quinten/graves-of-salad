@@ -9,7 +9,7 @@ var menuState = {
         this.menuGroup.x = game.world.centerX;
         this.menuGroup.y = game.world.centerY;
 
-        var textsprite = this.menuGroup.add(this.createText(0, -80, 'Ready?\nHit spacebar'));
+        var textsprite = this.menuGroup.add(this.createText(0, -80, 'Graves of salad\npress space'));
 
         //  Register the key.
         this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
