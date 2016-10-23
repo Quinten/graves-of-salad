@@ -16,6 +16,8 @@ var loadState = {
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
         game.load.spritesheet('redgibs', 'assets/sprites/redgibs.png', 6, 6);
         game.load.image('bullet', 'assets/sprites/bullet.png');
+        game.load.image('healthbar-outer', 'assets/sprites/healthbar-outer.png');
+        game.load.image('healthbar-inner', 'assets/sprites/healthbar-inner.png');
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
         game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
     },

@@ -141,6 +141,8 @@ var gameState = {
     fireRate: undefined,
     nextFire: undefined,
     resizeTO: 0,
+    healthbarInner: undefined,
+    healthbarOuter: undefined,
 
     create: function () {
 
@@ -266,6 +268,11 @@ var gameState = {
 
         this.playerCanBeRevived = false;
 
+        this.healthbarOuter = game.add.sprite(20, 20, 'healthbar-outer');
+        this.healthbarOuter.fixedToCamera = true;
+        this.healthbarInner = game.add.sprite(24, 24, 'healthbar-inner');
+        this.healthbarInner.fixedToCamera = true;
+        this.healthbarInner.anchor.setTo(0,0);
     },
 
     update: function () {
@@ -426,6 +433,8 @@ var gameState = {
 
             game.physics.arcade.collide(enemy, this.bullets, this.enemyBulletCollide, null, this);
         }
+
+        this.healthbarInner.width = Math.max(0, this.player.health) * 152;
     },
 
     enemy_reached_target_position: function (enemy, position) {
@@ -557,6 +566,8 @@ var gameState = {
         this.bullets = undefined;
         this.fireRate = undefined;
         this.nextFire = undefined;
+        this.healthbarInner = undefined;
+        this.healthbarOuter = undefined;
 
     }
 
@@ -580,6 +591,8 @@ var loadState = {
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
         game.load.spritesheet('redgibs', 'assets/sprites/redgibs.png', 6, 6);
         game.load.image('bullet', 'assets/sprites/bullet.png');
+        game.load.image('healthbar-outer', 'assets/sprites/healthbar-outer.png');
+        game.load.image('healthbar-inner', 'assets/sprites/healthbar-inner.png');
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
         game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
     },

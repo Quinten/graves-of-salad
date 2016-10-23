@@ -13,6 +13,8 @@ var gameState = {
     fireRate: undefined,
     nextFire: undefined,
     resizeTO: 0,
+    healthbarInner: undefined,
+    healthbarOuter: undefined,
 
     create: function () {
 
@@ -138,6 +140,11 @@ var gameState = {
 
         this.playerCanBeRevived = false;
 
+        this.healthbarOuter = game.add.sprite(20, 20, 'healthbar-outer');
+        this.healthbarOuter.fixedToCamera = true;
+        this.healthbarInner = game.add.sprite(24, 24, 'healthbar-inner');
+        this.healthbarInner.fixedToCamera = true;
+        this.healthbarInner.anchor.setTo(0,0);
     },
 
     update: function () {
@@ -298,6 +305,8 @@ var gameState = {
 
             game.physics.arcade.collide(enemy, this.bullets, this.enemyBulletCollide, null, this);
         }
+
+        this.healthbarInner.width = Math.max(0, this.player.health) * 152;
     },
 
     enemy_reached_target_position: function (enemy, position) {
@@ -429,6 +438,8 @@ var gameState = {
         this.bullets = undefined;
         this.fireRate = undefined;
         this.nextFire = undefined;
+        this.healthbarInner = undefined;
+        this.healthbarOuter = undefined;
 
     }
 
