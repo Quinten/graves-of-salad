@@ -8,6 +8,7 @@ var googleFontName = 'UnifrakturMaguntia';
 var music;
 
 var fx;
+var fxtwo;
 window.PhaserGlobal = { disableWebAudio: true };
 
 // http://www.colourlovers.com/palette/164182/Octobers_End

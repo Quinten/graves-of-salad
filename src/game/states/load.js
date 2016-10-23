@@ -9,6 +9,7 @@ var loadState = {
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         //game.load.image('square', 'assets/sprites/square.png');
         game.load.audio('sfx', ['assets/audio/audiosprite_mixdown.mp3', 'assets/audio/audiosprite_mixdown.ogg']);
+        game.load.audio('sfxtwo', ['assets/audio/audiospritetwo_mixdown.mp3', 'assets/audio/audiospritetwo_mixdown.ogg']);
         game.load.audio('eerie', ['assets/audio/eerie-mixdown.mp3', 'assets/audio/eerie-mixdown.ogg']);
         game.load.tilemap('map', 'assets/tilemaps/csv/graves.csv', null, Phaser.Tilemap.CSV);
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
@@ -26,7 +27,12 @@ var loadState = {
         fx.addMarker('player_explosion', 1, 6);
         fx.addMarker('enemy_explosion', 8, 1);
         fx.addMarker('bullet', 10, 0.5);
+
+        fxtwo = game.add.audio('sfxtwo');
+        fxtwo.allowMultiple = true;
+        fxtwo.addMarker('splat', 1, 1);
         // ...
+
 
         gameData = game.cache.getJSON('gameData');
         //console.log(gameData);
