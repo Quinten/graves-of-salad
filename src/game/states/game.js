@@ -355,6 +355,10 @@ var gameState = {
         game.camera.shake(0.05, 500);
         fxtwo.play('splat');
         enemy.health = 1;
+        var randomIndex = Math.floor(Math.random() * gameData.settings.enemies.spawnpoints.length);
+        var spawnpoint = gameData.settings.enemies.spawnpoints[randomIndex];
+        enemy.pathfinding.spawnpoint.x = spawnpoint.x;
+        enemy.pathfinding.spawnpoint.y = spawnpoint.y;
         enemy.body.x = enemy.pathfinding.spawnpoint.x;
         enemy.body.y = enemy.pathfinding.spawnpoint.y;
         enemy.pathfinding.path = [];
