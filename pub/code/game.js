@@ -301,6 +301,7 @@ var gameState = {
                         game.physics.arcade.moveToXY(bullet, this.player.x, 2048, 1000);
                         break;
                 }
+                fx.play('bullet');
             }
         }
 
@@ -416,6 +417,7 @@ var gameState = {
             this.enemyEmitter.y = enemy.y;
             this.enemyEmitter.start(true, 8000, null, 40);
             game.camera.shake(0.05, 500);
+            fx.play('enemy_explosion');
             enemy.health = 1;
             enemy.body.x = enemy.pathfinding.spawnpoint.x;
             enemy.body.y = enemy.pathfinding.spawnpoint.y;
@@ -432,6 +434,7 @@ var gameState = {
         this.enemyEmitter.y = enemyA.y;
         this.enemyEmitter.start(true, 8000, null, 40);
         game.camera.shake(0.05, 500);
+        fx.play('enemy_explosion');
         enemyA.health = 1;
         enemyA.body.x = enemyA.pathfinding.spawnpoint.x;
         enemyA.body.y = enemyA.pathfinding.spawnpoint.y;
@@ -446,6 +449,7 @@ var gameState = {
         this.emitter.y = this.player.y;
         this.emitter.start(true, 8000, null, 40);
         game.camera.shake(0.05, 500);
+        fx.play('player_explosion');
     },
 
     bulletsMapCollide: function (bullet, map) {
@@ -483,7 +487,7 @@ var loadState = {
         game.load.json('gameData', 'assets/data/game.json');
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         //game.load.image('square', 'assets/sprites/square.png');
-        //game.load.audio('sfx', 'assets/sounds/fx_mixdown.mp3');
+        game.load.audio('sfx', ['assets/audio/audiosprite_mixdown.mp3', 'assets/audio/audiosprite_mixdown.ogg']);
         game.load.audio('eerie', ['assets/audio/eerie-mixdown.mp3', 'assets/audio/eerie-mixdown.ogg']);
         game.load.tilemap('map', 'assets/tilemaps/csv/graves.csv', null, Phaser.Tilemap.CSV);
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
@@ -496,9 +500,11 @@ var loadState = {
 
     create: function () {
 
-        //fx = game.add.audio('sfx');
-        //fx.allowMultiple = true;
-        //fx.addMarker('sound_name', 1, 0.5);
+        fx = game.add.audio('sfx');
+        fx.allowMultiple = true;
+        fx.addMarker('player_explosion', 1, 6);
+        fx.addMarker('enemy_explosion', 8, 1);
+        fx.addMarker('bullet', 10, 0.5);
         // ...
 
         gameData = game.cache.getJSON('gameData');
