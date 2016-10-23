@@ -12,6 +12,7 @@ var gameState = {
     bullets: undefined,
     fireRate: undefined,
     nextFire: undefined,
+    resizeTO: 0,
 
     create: function () {
 
@@ -373,9 +374,13 @@ var gameState = {
 
     resize: function () {
 
-        var text = this.text;
-        text.x = (game.camera.width / 2) - 48;
-        text.y = game.camera.height / 2;
+        var that = this;
+        clearTimeout(this.resizeTO);
+        this.resizeTO = setTimeout(function () {
+            that.text.cameraOffset.x = game.camera.width / 2;
+            that.text.cameraOffset.y = (game.camera.height / 2) - 48;
+            that.layer.resize(game.camera.width, game.camera.height);
+        }, 1000);
 
     },
 
