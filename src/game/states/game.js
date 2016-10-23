@@ -136,6 +136,8 @@ var gameState = {
         this.hiddenCursorInfo = false;
         this.hiddenSpacebarInfo = false;
 
+        this.playerCanBeRevived = false;
+
     },
 
     update: function () {
@@ -214,6 +216,10 @@ var gameState = {
 
                 this.usedSpacebar = true;
             }
+        }
+
+        if (!this.player.alive && this.spaceKey.isDown && this.playerCanBeRevived) {
+            this.revivePlayer();
         }
 
         if (this.usedSpacebar && !this.hiddenSpacebarInfo) {
@@ -361,11 +367,35 @@ var gameState = {
     },
 
     playerKilled: function () {
+
         this.emitter.x = this.player.x;
         this.emitter.y = this.player.y;
         this.emitter.start(true, 8000, null, 40);
         game.camera.shake(0.05, 500);
         fx.play('player_explosion');
+
+        this.text.fill = '#6b9541';
+        this.text.text = 'Game over';
+        this.text.visible = true;
+
+        game.time.events.add(Phaser.Timer.SECOND * 3, function () {
+            this.playerCanBeRevived = true;
+        }, this);
+
+        game.time.events.add(Phaser.Timer.SECOND * 8, function () {
+            this.text.fill = '#80649b';
+            this.text.text = 'Space to play again';
+            // if it is visible then it is
+        }, this);
+
+    },
+
+    revivePlayer: function () {
+        this.player.body.x = 56;
+        this.player.body.y = 56;
+        this.player.revive(1);
+        this.text.visible = false;
+        this.playerCanBeRevived = false;
     },
 
     bulletsMapCollide: function (bullet, map) {
