@@ -459,39 +459,37 @@ var gameState = {
     },
 
     enemyBulletCollide: function (enemy, bullet) {
+
         bullet.kill();
-        // todo: needs refactoring
+
         enemy.health -= 0.1;
         if (enemy.health <= 0.2) {
-            this.enemyEmitter.x = enemy.x;
-            this.enemyEmitter.y = enemy.y;
-            this.enemyEmitter.start(true, 8000, null, 40);
-            game.camera.shake(0.05, 500);
-            fxtwo.play('splat');
-            enemy.health = 1;
-            enemy.body.x = enemy.pathfinding.spawnpoint.x;
-            enemy.body.y = enemy.pathfinding.spawnpoint.y;
-            enemy.pathfinding.path = [];
-            enemy.pathfinding.path_step = -1;
-            enemy.body.velocity.x = 0;
-            enemy.body.velocity.y = 0;
+            this.enemyKilled(enemy);
         }
+
     },
 
     enemyEnemyCollide: function (enemyA, enemyB) {
-        // todo: needs refactoring
-        this.enemyEmitter.x = enemyA.x;
-        this.enemyEmitter.y = enemyA.y;
+
+        this.enemyKilled(enemyA);
+
+    },
+
+    enemyKilled: function (enemy) {
+
+        this.enemyEmitter.x = enemy.x;
+        this.enemyEmitter.y = enemy.y;
         this.enemyEmitter.start(true, 8000, null, 40);
         game.camera.shake(0.05, 500);
         fxtwo.play('splat');
-        enemyA.health = 1;
-        enemyA.body.x = enemyA.pathfinding.spawnpoint.x;
-        enemyA.body.y = enemyA.pathfinding.spawnpoint.y;
-        enemyA.pathfinding.path = [];
-        enemyA.pathfinding.path_step = -1;
-        enemyA.body.velocity.x = 0;
-        enemyA.body.velocity.y = 0;
+        enemy.health = 1;
+        enemy.body.x = enemy.pathfinding.spawnpoint.x;
+        enemy.body.y = enemy.pathfinding.spawnpoint.y;
+        enemy.pathfinding.path = [];
+        enemy.pathfinding.path_step = -1;
+        enemy.body.velocity.x = 0;
+        enemy.body.velocity.y = 0;
+
     },
 
     playerKilled: function () {
