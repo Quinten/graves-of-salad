@@ -20,6 +20,8 @@ var gameState = {
     ammobarInner: undefined,
     ammobarOuter: undefined,
     ammokit: undefined,
+    score: undefined,
+    scoreText: undefined,
 
     create: function () {
 
@@ -174,6 +176,16 @@ var gameState = {
         this.ammobarInner.fixedToCamera = true;
         this.ammobarInner.anchor.setTo(1,0);
         this.ammobarInner.cameraOffset.x = game.camera.width - 24;
+
+        this.score = 0;
+
+        text = this.scoreText = game.add.text(20, game.camera.height - 10, "+" + this.score);
+        text.anchor.setTo(0, 1);
+        text.font = 'monospace';
+        text.fontSize = 24;
+        text.fill = '#6b9541';
+        text.align = 'left';
+        text.fixedToCamera = true;
 
     },
 
@@ -393,6 +405,8 @@ var gameState = {
         enemy.health -= 0.1;
         if (enemy.health <= 0.2) {
             this.enemyKilled(enemy);
+            this.score += 1;
+            this.scoreText.text = "+" + this.score;
         }
 
         enemy.pathfinding.path = [];
@@ -462,6 +476,8 @@ var gameState = {
         this.ammobarInner.width = 152;
         this.text.visible = false;
         this.playerCanBeRevived = false;
+        this.score = 0;
+        this.scoreText.text = "+" + this.score;
     },
 
     playerHealthkitOverlap: function (player, healthkit) {
@@ -502,6 +518,7 @@ var gameState = {
             that.layer.resize(game.camera.width, game.camera.height);
             that.ammobarOuter.cameraOffset.x = game.camera.width - 20;
             that.ammobarInner.cameraOffset.x = game.camera.width - 24;
+            that.scoreText.cameraOffset.y = game.camera.height - 10;
         }, 1000);
 
     },
@@ -526,6 +543,8 @@ var gameState = {
         this.ammobarInner = undefined;
         this.ammobarOuter = undefined;
         this.ammokit = undefined;
+        this.score = undefined;
+        this.scoreText = undefined;
 
     }
 
