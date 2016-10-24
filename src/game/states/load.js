@@ -4,12 +4,14 @@ var loadState = {
 
     preload: function () {
 
+        var versionSuffix = '?v11';
+
         // do preloading
         game.load.json('gameData', 'assets/data/game.json');
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         //game.load.image('square', 'assets/sprites/square.png');
         game.load.audio('sfx', ['assets/audio/audiosprite_mixdown.mp3', 'assets/audio/audiosprite_mixdown.ogg']);
-        game.load.audio('sfxtwo', ['assets/audio/audiospritetwo_mixdown.mp3', 'assets/audio/audiospritetwo_mixdown.ogg']);
+        game.load.audio('sfxtwo', ['assets/audio/audiospritetwo_mixdown.mp3' + versionSuffix, 'assets/audio/audiospritetwo_mixdown.ogg' + versionSuffix]);
         game.load.audio('eerie', ['assets/audio/eerie-mixdown.mp3', 'assets/audio/eerie-mixdown.ogg']);
         game.load.tilemap('map', 'assets/tilemaps/csv/graves.csv', null, Phaser.Tilemap.CSV);
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
@@ -18,6 +20,7 @@ var loadState = {
         game.load.image('bullet', 'assets/sprites/bullet.png');
         game.load.image('healthbar-outer', 'assets/sprites/healthbar-outer.png');
         game.load.image('healthbar-inner', 'assets/sprites/healthbar-inner.png');
+        game.load.image('health-kit', 'assets/sprites/health-kit.png');
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
         game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
     },
@@ -33,6 +36,7 @@ var loadState = {
         fxtwo = game.add.audio('sfxtwo');
         fxtwo.allowMultiple = true;
         fxtwo.addMarker('splat', 1, 1);
+        fxtwo.addMarker('healthup', 3, 1);
         // ...
 
 

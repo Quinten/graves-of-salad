@@ -15,6 +15,7 @@ var gameState = {
     resizeTO: 0,
     healthbarInner: undefined,
     healthbarOuter: undefined,
+    healthkit: undefined,
 
     create: function () {
 
@@ -43,6 +44,13 @@ var gameState = {
         }
         var tile_dimensions = new Phaser.Point(this.map.tileWidth, this.map.tileHeight);
         this.pathfinding = this.game.plugins.add(Pathfinding, this.map.layers[0].data, walkableTiles, tile_dimensions);
+
+        var randomIndex = Math.floor(Math.random() * gameData.settings.healthkit.spawnpoints.length);
+        var healthkitSpawnpoint = gameData.settings.healthkit.spawnpoints[randomIndex];
+        this.healthkit = game.add.sprite(healthkitSpawnpoint.x, healthkitSpawnpoint.y, 'health-kit');
+        game.physics.enable(this.healthkit, Phaser.Physics.ARCADE);
+        this.healthkit.body.setSize(10, 10, 2, 2);
+        this.healthkit.anchor.setTo(0.5,0.5);
 
         //  Player
         this.player = game.add.sprite(56, 56, 'player', 1);
@@ -229,6 +237,13 @@ var gameState = {
             this.revivePlayer();
         }
 
+        if (this.player.alive && this.player.health < 0.5) {
+            this.healthkit.visible = true;
+            game.physics.arcade.overlap(this.player, this.healthkit, this.playerHealthkitOverlap, null, this);
+        } else {
+            this.healthkit.visible = false;
+        }
+
         if (this.usedSpacebar && !this.hiddenSpacebarInfo) {
             this.text.visible = false;
             this.hiddenSpacebarInfo = true;
@@ -333,7 +348,7 @@ var gameState = {
 
     enemyPlayerCollide: function (enemy, player) {
         player.health -= enemy.pathfinding.damage;
-        console.log(player.health);
+        //console.log(player.health);
         if (player.health < 0) {
             player.kill();
         }
@@ -409,6 +424,17 @@ var gameState = {
         this.playerCanBeRevived = false;
     },
 
+    playerHealthkitOverlap: function (player, healthkit) {
+        //console.log('overlap');
+        var randomIndex = Math.floor(Math.random() * gameData.settings.healthkit.spawnpoints.length);
+        var healthkitSpawnpoint = gameData.settings.healthkit.spawnpoints[randomIndex];
+        this.healthkit.body.x = healthkitSpawnpoint.x;
+        this.healthkit.body.y = healthkitSpawnpoint.y;
+        this.healthkit.visible = false;
+        this.player.health = 1;
+        fxtwo.play('healthup');
+    },
+
     bulletsMapCollide: function (bullet, map) {
         bullet.kill();
     },
@@ -440,6 +466,7 @@ var gameState = {
         this.nextFire = undefined;
         this.healthbarInner = undefined;
         this.healthbarOuter = undefined;
+        this.healthkit = undefined;
 
     }
 
