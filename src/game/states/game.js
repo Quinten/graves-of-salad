@@ -350,7 +350,8 @@ var gameState = {
                 }
             }
 
-            game.physics.arcade.collide(enemy, this.bullets, this.enemyBulletCollide, null, this);
+            // collide is cool effect, but also makes them more easy to kill
+            game.physics.arcade.overlap(enemy, this.bullets, this.enemyBulletCollide, null, this);
         }
     },
 
@@ -393,6 +394,11 @@ var gameState = {
         if (enemy.health <= 0.2) {
             this.enemyKilled(enemy);
         }
+
+        enemy.pathfinding.path = [];
+        enemy.pathfinding.path_step = -1;
+        enemy.body.velocity.x = 0;
+        enemy.body.velocity.y = 0;
 
     },
 
