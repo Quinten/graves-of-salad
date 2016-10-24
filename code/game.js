@@ -143,6 +143,7 @@ var gameState = {
     resizeTO: 0,
     healthbarInner: undefined,
     healthbarOuter: undefined,
+    healthkit: undefined,
 
     create: function () {
 
@@ -171,6 +172,13 @@ var gameState = {
         }
         var tile_dimensions = new Phaser.Point(this.map.tileWidth, this.map.tileHeight);
         this.pathfinding = this.game.plugins.add(Pathfinding, this.map.layers[0].data, walkableTiles, tile_dimensions);
+
+        var randomIndex = Math.floor(Math.random() * gameData.settings.healthkit.spawnpoints.length);
+        var healthkitSpawnpoint = gameData.settings.healthkit.spawnpoints[randomIndex];
+        this.healthkit = game.add.sprite(healthkitSpawnpoint.x, healthkitSpawnpoint.y, 'health-kit');
+        game.physics.enable(this.healthkit, Phaser.Physics.ARCADE);
+        this.healthkit.body.setSize(10, 10, 2, 2);
+        this.healthkit.anchor.setTo(0.5,0.5);
 
         //  Player
         this.player = game.add.sprite(56, 56, 'player', 1);
@@ -357,6 +365,13 @@ var gameState = {
             this.revivePlayer();
         }
 
+        if (this.player.alive && this.player.health < 0.5) {
+            this.healthkit.visible = true;
+            game.physics.arcade.overlap(this.player, this.healthkit, this.playerHealthkitOverlap, null, this);
+        } else {
+            this.healthkit.visible = false;
+        }
+
         if (this.usedSpacebar && !this.hiddenSpacebarInfo) {
             this.text.visible = false;
             this.hiddenSpacebarInfo = true;
@@ -461,7 +476,7 @@ var gameState = {
 
     enemyPlayerCollide: function (enemy, player) {
         player.health -= enemy.pathfinding.damage;
-        console.log(player.health);
+        //console.log(player.health);
         if (player.health < 0) {
             player.kill();
         }
@@ -537,6 +552,17 @@ var gameState = {
         this.playerCanBeRevived = false;
     },
 
+    playerHealthkitOverlap: function (player, healthkit) {
+        //console.log('overlap');
+        var randomIndex = Math.floor(Math.random() * gameData.settings.healthkit.spawnpoints.length);
+        var healthkitSpawnpoint = gameData.settings.healthkit.spawnpoints[randomIndex];
+        this.healthkit.body.x = healthkitSpawnpoint.x;
+        this.healthkit.body.y = healthkitSpawnpoint.y;
+        this.healthkit.visible = false;
+        this.player.health = 1;
+        fxtwo.play('healthup');
+    },
+
     bulletsMapCollide: function (bullet, map) {
         bullet.kill();
     },
@@ -568,6 +594,7 @@ var gameState = {
         this.nextFire = undefined;
         this.healthbarInner = undefined;
         this.healthbarOuter = undefined;
+        this.healthkit = undefined;
 
     }
 
@@ -579,12 +606,14 @@ var loadState = {
 
     preload: function () {
 
+        var versionSuffix = '?v11';
+
         // do preloading
         game.load.json('gameData', 'assets/data/game.json');
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         //game.load.image('square', 'assets/sprites/square.png');
         game.load.audio('sfx', ['assets/audio/audiosprite_mixdown.mp3', 'assets/audio/audiosprite_mixdown.ogg']);
-        game.load.audio('sfxtwo', ['assets/audio/audiospritetwo_mixdown.mp3', 'assets/audio/audiospritetwo_mixdown.ogg']);
+        game.load.audio('sfxtwo', ['assets/audio/audiospritetwo_mixdown.mp3' + versionSuffix, 'assets/audio/audiospritetwo_mixdown.ogg' + versionSuffix]);
         game.load.audio('eerie', ['assets/audio/eerie-mixdown.mp3', 'assets/audio/eerie-mixdown.ogg']);
         game.load.tilemap('map', 'assets/tilemaps/csv/graves.csv', null, Phaser.Tilemap.CSV);
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
@@ -593,6 +622,7 @@ var loadState = {
         game.load.image('bullet', 'assets/sprites/bullet.png');
         game.load.image('healthbar-outer', 'assets/sprites/healthbar-outer.png');
         game.load.image('healthbar-inner', 'assets/sprites/healthbar-inner.png');
+        game.load.image('health-kit', 'assets/sprites/health-kit.png');
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
         game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
     },
@@ -608,6 +638,7 @@ var loadState = {
         fxtwo = game.add.audio('sfxtwo');
         fxtwo.allowMultiple = true;
         fxtwo.addMarker('splat', 1, 1);
+        fxtwo.addMarker('healthup', 3, 1);
         // ...
 
 
