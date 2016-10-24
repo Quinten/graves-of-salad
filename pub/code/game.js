@@ -140,10 +140,14 @@ var gameState = {
     bullets: undefined,
     fireRate: undefined,
     nextFire: undefined,
+    ammo: undefined,
     resizeTO: 0,
     healthbarInner: undefined,
     healthbarOuter: undefined,
     healthkit: undefined,
+    ammobarInner: undefined,
+    ammobarOuter: undefined,
+    ammokit: undefined,
 
     create: function () {
 
@@ -180,6 +184,13 @@ var gameState = {
         this.healthkit.body.setSize(10, 10, 2, 2);
         this.healthkit.anchor.setTo(0.5,0.5);
 
+        randomIndex = Math.floor(Math.random() * gameData.settings.ammokit.spawnpoints.length);
+        var ammokitSpawnpoint = gameData.settings.ammokit.spawnpoints[randomIndex];
+        this.ammokit = game.add.sprite(((ammokitSpawnpoint.x * 16) + 8), ((ammokitSpawnpoint.y * 16) + 8), 'ammo-kit');
+        game.physics.enable(this.ammokit, Phaser.Physics.ARCADE);
+        this.ammokit.body.setSize(10, 10, 2, 2);
+        this.ammokit.anchor.setTo(0.5,0.5);
+
         //  Player
         this.player = game.add.sprite(56, 56, 'player', 1);
         this.player.animations.add('left', [8,9], 10, true);
@@ -211,6 +222,7 @@ var gameState = {
 
         this.fireRate = 100;
         this.nextFire = 0;
+        this.ammo = 1;
 
         //  Register the space key.
         this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -281,6 +293,16 @@ var gameState = {
         this.healthbarInner = game.add.sprite(24, 24, 'healthbar-inner');
         this.healthbarInner.fixedToCamera = true;
         this.healthbarInner.anchor.setTo(0,0);
+
+        this.ammobarOuter = game.add.sprite(20, 20, 'ammobar-outer');
+        this.ammobarOuter.fixedToCamera = true;
+        this.ammobarOuter.anchor.setTo(1,0);
+        this.ammobarOuter.cameraOffset.x = game.camera.width - 20;
+        this.ammobarInner = game.add.sprite(24, 24, 'ammobar-inner');
+        this.ammobarInner.fixedToCamera = true;
+        this.ammobarInner.anchor.setTo(1,0);
+        this.ammobarInner.cameraOffset.x = game.camera.width - 24;
+
     },
 
     update: function () {
@@ -328,7 +350,7 @@ var gameState = {
             }, this);
         }
 
-        if (this.player.alive && this.spaceKey.isDown) {
+        if (this.player.alive && (this.ammo > 0) && this.spaceKey.isDown) {
             if (game.time.now > this.nextFire && this.bullets.countDead() > 0)
             {
                 this.nextFire = game.time.now + this.fireRate;
@@ -357,6 +379,9 @@ var gameState = {
                 }
                 fx.play('bullet');
 
+                this.ammo -= 0.01;
+                this.ammobarInner.width = Math.max(0, this.ammo) * 152;
+
                 this.usedSpacebar = true;
             }
         }
@@ -370,6 +395,13 @@ var gameState = {
             game.physics.arcade.overlap(this.player, this.healthkit, this.playerHealthkitOverlap, null, this);
         } else {
             this.healthkit.visible = false;
+        }
+
+        if (this.player.alive && this.ammo < 0.25) {
+            this.ammokit.visible = true;
+            game.physics.arcade.overlap(this.player, this.ammokit, this.playerAmmokitOverlap, null, this);
+        } else {
+            this.ammokit.visible = false;
         }
 
         if (this.usedSpacebar && !this.hiddenSpacebarInfo) {
@@ -448,8 +480,6 @@ var gameState = {
 
             game.physics.arcade.collide(enemy, this.bullets, this.enemyBulletCollide, null, this);
         }
-
-        this.healthbarInner.width = Math.max(0, this.player.health) * 152;
     },
 
     enemy_reached_target_position: function (enemy, position) {
@@ -476,6 +506,7 @@ var gameState = {
 
     enemyPlayerCollide: function (enemy, player) {
         player.health -= enemy.pathfinding.damage;
+        this.healthbarInner.width = Math.max(0, this.player.health) * 152;
         //console.log(player.health);
         if (player.health < 0) {
             player.kill();
@@ -548,6 +579,9 @@ var gameState = {
         this.player.body.x = 56;
         this.player.body.y = 56;
         this.player.revive(1);
+        this.healthbarInner.width = 152;
+        this.ammo = 1;
+        this.ammobarInner.width = 152;
         this.text.visible = false;
         this.playerCanBeRevived = false;
     },
@@ -560,6 +594,19 @@ var gameState = {
         this.healthkit.body.y = (healthkitSpawnpoint.y * 16) + 8;
         this.healthkit.visible = false;
         this.player.health = 1;
+        this.healthbarInner.width = 152;
+        fxtwo.play('healthup');
+    },
+
+    playerAmmokitOverlap: function (player, ammokit) {
+        //console.log('overlap');
+        var randomIndex = Math.floor(Math.random() * gameData.settings.ammokit.spawnpoints.length);
+        var ammokitSpawnpoint = gameData.settings.ammokit.spawnpoints[randomIndex];
+        this.ammokit.body.x = (ammokitSpawnpoint.x * 16) + 8;
+        this.ammokit.body.y = (ammokitSpawnpoint.y * 16) + 8;
+        this.ammokit.visible = false;
+        this.ammo = 1;
+        this.ammobarInner.width = 152;
         fxtwo.play('healthup');
     },
 
@@ -575,6 +622,8 @@ var gameState = {
             that.text.cameraOffset.x = game.camera.width / 2;
             that.text.cameraOffset.y = (game.camera.height / 2) - 48;
             that.layer.resize(game.camera.width, game.camera.height);
+            that.ammobarOuter.cameraOffset.x = game.camera.width - 20;
+            that.ammobarInner.cameraOffset.x = game.camera.width - 24;
         }, 1000);
 
     },
@@ -592,9 +641,13 @@ var gameState = {
         this.bullets = undefined;
         this.fireRate = undefined;
         this.nextFire = undefined;
+        this.ammo = undefined;
         this.healthbarInner = undefined;
         this.healthbarOuter = undefined;
         this.healthkit = undefined;
+        this.ammobarInner = undefined;
+        this.ammobarOuter = undefined;
+        this.ammokit = undefined;
 
     }
 
@@ -620,6 +673,9 @@ var loadState = {
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
         game.load.spritesheet('redgibs', 'assets/sprites/redgibs.png', 6, 6);
         game.load.image('bullet', 'assets/sprites/bullet.png');
+        game.load.image('ammobar-outer', 'assets/sprites/ammobar-outer.png');
+        game.load.image('ammobar-inner', 'assets/sprites/ammobar-inner.png');
+        game.load.image('ammo-kit', 'assets/sprites/ammo-kit.png');
         game.load.image('healthbar-outer', 'assets/sprites/healthbar-outer.png');
         game.load.image('healthbar-inner', 'assets/sprites/healthbar-inner.png');
         game.load.image('health-kit', 'assets/sprites/health-kit.png');

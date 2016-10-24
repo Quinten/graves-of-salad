@@ -18,6 +18,9 @@ var loadState = {
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
         game.load.spritesheet('redgibs', 'assets/sprites/redgibs.png', 6, 6);
         game.load.image('bullet', 'assets/sprites/bullet.png');
+        game.load.image('ammobar-outer', 'assets/sprites/ammobar-outer.png');
+        game.load.image('ammobar-inner', 'assets/sprites/ammobar-inner.png');
+        game.load.image('ammo-kit', 'assets/sprites/ammo-kit.png');
         game.load.image('healthbar-outer', 'assets/sprites/healthbar-outer.png');
         game.load.image('healthbar-inner', 'assets/sprites/healthbar-inner.png');
         game.load.image('health-kit', 'assets/sprites/health-kit.png');
