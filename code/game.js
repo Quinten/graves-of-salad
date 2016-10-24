@@ -175,7 +175,7 @@ var gameState = {
 
         var randomIndex = Math.floor(Math.random() * gameData.settings.healthkit.spawnpoints.length);
         var healthkitSpawnpoint = gameData.settings.healthkit.spawnpoints[randomIndex];
-        this.healthkit = game.add.sprite(healthkitSpawnpoint.x, healthkitSpawnpoint.y, 'health-kit');
+        this.healthkit = game.add.sprite(((healthkitSpawnpoint.x * 16) + 8), ((healthkitSpawnpoint.y * 16) + 8), 'health-kit');
         game.physics.enable(this.healthkit, Phaser.Physics.ARCADE);
         this.healthkit.body.setSize(10, 10, 2, 2);
         this.healthkit.anchor.setTo(0.5,0.5);
@@ -556,8 +556,8 @@ var gameState = {
         //console.log('overlap');
         var randomIndex = Math.floor(Math.random() * gameData.settings.healthkit.spawnpoints.length);
         var healthkitSpawnpoint = gameData.settings.healthkit.spawnpoints[randomIndex];
-        this.healthkit.body.x = healthkitSpawnpoint.x;
-        this.healthkit.body.y = healthkitSpawnpoint.y;
+        this.healthkit.body.x = (healthkitSpawnpoint.x * 16) + 8;
+        this.healthkit.body.y = (healthkitSpawnpoint.y * 16) + 8;
         this.healthkit.visible = false;
         this.player.health = 1;
         fxtwo.play('healthup');
