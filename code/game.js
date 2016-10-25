@@ -612,8 +612,8 @@ var gameState = {
         //console.log('overlap');
         var randomIndex = Math.floor(Math.random() * gameData.settings.healthkit.spawnpoints.length);
         var healthkitSpawnpoint = gameData.settings.healthkit.spawnpoints[randomIndex];
-        this.healthkit.body.x = (healthkitSpawnpoint.x * 16) + 8;
-        this.healthkit.body.y = (healthkitSpawnpoint.y * 16) + 8;
+        this.healthkit.body.x = healthkitSpawnpoint.x * 16;
+        this.healthkit.body.y = healthkitSpawnpoint.y * 16;
         this.healthkit.visible = false;
         this.player.health = 1;
         this.healthbarInner.width = 152;
@@ -624,8 +624,8 @@ var gameState = {
         //console.log('overlap');
         var randomIndex = Math.floor(Math.random() * gameData.settings.ammokit.spawnpoints.length);
         var ammokitSpawnpoint = gameData.settings.ammokit.spawnpoints[randomIndex];
-        this.ammokit.body.x = (ammokitSpawnpoint.x * 16) + 8;
-        this.ammokit.body.y = (ammokitSpawnpoint.y * 16) + 8;
+        this.ammokit.body.x = ammokitSpawnpoint.x * 16;
+        this.ammokit.body.y = ammokitSpawnpoint.y * 16;
         this.ammokit.visible = false;
         this.ammo = 1;
         this.ammobarInner.width = 152;
