@@ -307,9 +307,9 @@ var gameState = {
 
         this.score = 0;
 
-        text = this.scoreText = game.add.text(20, game.camera.height - 10, "+" + this.score);
+        text = this.scoreText = game.add.text(20, game.camera.height - 10, romanize(this.score));
         text.anchor.setTo(0, 1);
-        text.font = 'monospace';
+        text.font = serifFontName;
         text.fontSize = 24;
         text.fill = '#6b9541';
         text.align = 'left';
@@ -534,7 +534,7 @@ var gameState = {
         if (enemy.health <= 0.2) {
             this.enemyKilled(enemy);
             this.score += 1;
-            this.scoreText.text = "+" + this.score;
+            this.scoreText.text = romanize(this.score);
         }
 
         enemy.pathfinding.path = [];
@@ -605,7 +605,7 @@ var gameState = {
         this.text.visible = false;
         this.playerCanBeRevived = false;
         this.score = 0;
-        this.scoreText.text = "+" + this.score;
+        this.scoreText.text = romanize(this.score);
     },
 
     playerHealthkitOverlap: function (player, healthkit) {
@@ -848,6 +848,9 @@ var gameData;
 var fontName = 'monospace';
 var googleFontName = 'UnifrakturMaguntia';
 
+var serifFontName = 'serif';
+var googleSerifFontName = 'IM Fell DW Pica SC';
+
 var music;
 
 var fx;
@@ -861,11 +864,23 @@ var colors = {normalBG: '#131822', normalStroke: '#31453e'};
 var tints = {normalBG: 0x131822, normalStroke: 0x31453e};
 
 WebFontConfig = {
-    active: function() { fontName = googleFontName; },
+    active: function() { fontName = googleFontName; serifFontName = googleSerifFontName; },
     google: {
-        families: [googleFontName]
+        families: [googleFontName, googleSerifFontName]
     }
 };
+
+// for an obscure roman score
+function romanize (num) {
+  var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},roman = '',i;
+  for ( i in lookup ) {
+    while ( num >= lookup[i] ) {
+      roman += i;
+      num -= lookup[i];
+    }
+  }
+  return roman;
+}
 
 window.onload = function() {
 
