@@ -409,7 +409,7 @@ var gameState = {
             this.healthkit.visible = false;
         }
 
-        if (this.player.alive && this.ammo < 0.25) {
+        if (this.player.alive && this.ammo < 0.5) {
             this.ammokit.visible = true;
             game.physics.arcade.overlap(this.player, this.ammokit, this.playerAmmokitOverlap, null, this);
         } else {
