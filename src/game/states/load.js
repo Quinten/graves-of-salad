@@ -26,6 +26,7 @@ var loadState = {
         game.load.image('health-kit', 'assets/sprites/health-kit.png');
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
         game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
+        game.load.image('startscreen', 'assets/sprites/startscreen.png');
     },
 
     create: function () {

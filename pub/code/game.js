@@ -706,6 +706,7 @@ var loadState = {
         game.load.image('health-kit', 'assets/sprites/health-kit.png');
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
         game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
+        game.load.image('startscreen', 'assets/sprites/startscreen.png');
     },
 
     create: function () {
@@ -746,6 +747,8 @@ var menuState = {
 
     menuGroup: undefined,
     switched: false,
+    textstart: undefined,
+    blinkCount: 0,
 
     create: function () {
 
@@ -753,7 +756,11 @@ var menuState = {
         this.menuGroup.x = game.world.centerX;
         this.menuGroup.y = game.world.centerY;
 
-        var textsprite = this.menuGroup.add(this.createText(0, -80, 'Graves of salad\npress space'));
+        var textsprite = this.menuGroup.add(this.createText(0, -142, 'Graves of salad', '#6b9541', 42));
+        this.textstart = this.menuGroup.add(this.createText(0, 142, 'press space', colors.normalStroke, 20));
+
+        var startimage = this.menuGroup.add(game.add.sprite(0, 0, 'startscreen'));
+        startimage.anchor.setTo(0.5);
 
         //  Register the key.
         this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -771,6 +778,12 @@ var menuState = {
             this.switched = true;
             game.state.start('game');
         }
+
+        this.blinkCount++;
+        if (this.blinkCount > 15) {
+            this.blinkCount = 0;
+            this.textstart.visible = !this.textstart.visible;
+        }
     },
 
     resize: function () {
@@ -783,16 +796,17 @@ var menuState = {
     shutdown: function () {
 
         this.menuGroup = undefined;
+        this.textstart = undefined;
 
     },
 
-    createText: function (x, y, text) {
+    createText: function (x, y, text, color, size) {
 
         var textSprite = game.add.text(x, y, text);
         textSprite.anchor.setTo(0.5);
         textSprite.font = fontName;
-        textSprite.fontSize = 32;
-        textSprite.fill = colors.normalStroke;
+        textSprite.fontSize = size;
+        textSprite.fill = color;
         textSprite.align = 'center';
 
         return textSprite;
