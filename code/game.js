@@ -317,6 +317,15 @@ var gameState = {
 
     },
 
+    /*
+    render: function () {
+        function renderGroup(member) {
+            game.debug.body(member);
+        }
+        this.bullets.forEachAlive(renderGroup, this);
+    },
+    */
+
     update: function () {
 
         game.physics.arcade.collide(this.emitter, this.layer);
@@ -374,18 +383,22 @@ var gameState = {
                 switch (this.player.facing) {
                     case 'left':
                         bullet.angle = 180;
+                        bullet.body.setSize(36,12,0,0);
                         game.physics.arcade.moveToXY(bullet, 0, this.player.y, 1000);
                         break;
                     case 'right':
                         bullet.angle = 0;
+                        bullet.body.setSize(36,12,0,0);
                         game.physics.arcade.moveToXY(bullet, 2048, this.player.y, 1000);
                         break;
                     case 'up':
                         bullet.angle = -90;
+                        bullet.body.setSize(12,36,12,-12);
                         game.physics.arcade.moveToXY(bullet, this.player.x, 0, 1000);
                         break;
                     case 'down':
                         bullet.angle = 90;
+                        bullet.body.setSize(12,36,12,-12);
                         game.physics.arcade.moveToXY(bullet, this.player.x, 2048, 1000);
                         break;
                 }
