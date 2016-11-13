@@ -24,11 +24,16 @@ var menuState = {
         game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
         this.switched = false;
+
+        //if (game.input.gamepad.supported && game.input.gamepad.active && pad1.connected) {
+            //console.log('gamepad yes');
+        //}
+
     },
 
     update: function () {
 
-        if (this.spaceKey.downDuration(1000) && !this.switched) {
+        if ((pad1.justPressed(Phaser.Gamepad.XBOX360_A) || this.spaceKey.downDuration(1000)) && !this.switched) {
             //console.log('switched');
             this.switched = true;
             game.state.start('game');

@@ -208,22 +208,22 @@ var gameState = {
 
         this.player.body.velocity.set(0);
 
-        if (this.cursors.left.isDown) {
+        if (this.cursors.left.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
             this.player.body.velocity.x = -100;
             this.player.play('left');
             this.player.facing = 'left';
             this.usedCursors = true;
-        } else if (this.cursors.right.isDown) {
+        } else if (this.cursors.right.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
             this.player.body.velocity.x = 100;
             this.player.play('right');
             this.player.facing = 'right';
             this.usedCursors = true;
-        } else if (this.cursors.up.isDown) {
+        } else if (this.cursors.up.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
             this.player.body.velocity.y = -100;
             this.player.play('up');
             this.player.facing = 'up';
             this.usedCursors = true;
-        } else if (this.cursors.down.isDown) {
+        } else if (this.cursors.down.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
             this.player.body.velocity.y = 100;
             this.player.play('down');
             this.player.facing = 'down';
@@ -243,7 +243,7 @@ var gameState = {
             }, this);
         }
 
-        if (this.player.alive && (this.ammo > 0) && this.spaceKey.isDown) {
+        if (this.player.alive && (this.ammo > 0) && (this.spaceKey.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A))) {
             if (game.time.now > this.nextFire && this.bullets.countDead() > 0)
             {
                 this.nextFire = game.time.now + this.fireRate;
@@ -283,7 +283,7 @@ var gameState = {
             }
         }
 
-        if (!this.player.alive && this.spaceKey.isDown && this.playerCanBeRevived) {
+        if (!this.player.alive && (this.spaceKey.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A)) && this.playerCanBeRevived) {
             this.revivePlayer();
         }
 
