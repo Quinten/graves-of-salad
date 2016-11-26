@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="4" height="4" tilewidth="16" tileheight="16" nextobjectid="1">
+ <tileset firstgid="1" name="tiles_16" tilewidth="16" tileheight="16" tilecount="140" columns="28">
+  <image source="../pub/assets/tilemaps/tiles/tiles_16.png" width="448" height="80"/>
+ </tileset>
+ <tileset firstgid="141" name="salad" tilewidth="16" tileheight="16" tilecount="15" columns="15">
+  <image source="../pub/assets/sprites/salad.png" width="240" height="16"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="4" height="4">
+  <data encoding="csv">
+1,1,1,1,
+1,11,1,1,
+1,9,1,1,
+12,1,1,1
+</data>
+ </layer>
+ <layer name="Tile Layer 2" width="4" height="4">
+  <data encoding="csv">
+0,0,4,0,
+0,0,0,6,
+6,0,149,1,
+12,0,0,4
+</data>
+ </layer>
+</map>
