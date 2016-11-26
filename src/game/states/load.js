@@ -15,6 +15,7 @@ var loadState = {
         game.load.audio('eerie', ['assets/audio/eerie-mixdown.mp3', 'assets/audio/eerie-mixdown.ogg']);
         game.load.tilemap('map', 'assets/tilemaps/csv/graves.csv', null, Phaser.Tilemap.CSV);
         game.load.image('tiles', 'assets/tilemaps/tiles/tiles_16.png');
+        game.load.image('levelflat', 'assets/sprites/level.png');
         game.load.spritesheet('player', 'assets/sprites/eddy.png', 16, 16);
         game.load.spritesheet('redgibs', 'assets/sprites/redgibs.png', 6, 6);
         game.load.image('bullet', 'assets/sprites/bullet.png');

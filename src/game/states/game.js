@@ -3,6 +3,7 @@ var gameState = {
     text: undefined,
     map: undefined,
     layer: undefined,
+    levelflat: undefined,
     cursors: undefined,
     player: undefined,
     enemies: undefined,
@@ -25,20 +26,27 @@ var gameState = {
 
     create: function () {
 
+        game.time.advancedTiming = true; // for debuging the fps
+
         //  Because we're loading CSV map data we have to specify the tile size here or we can't render it
         this.map = game.add.tilemap('map', 16, 16);
 
         //  Now add in the tileset
-        this.map.addTilesetImage('tiles');
+        //this.map.addTilesetImage('tiles');
 
         //  Create our layer
         this.layer = this.map.createLayer(0);
+        //this.layer.renderSettings = {"enableScrollDelta":false,"overdrawRatio":0.2,"copyCanvas":null};
+        this.layer.visible = false;
 
         //  Resize the world
         this.layer.resizeWorld();
 
         //  This isn't totally accurate, but it'll do for now
         this.map.setCollisionBetween(54, 83);
+
+        // flattended map
+        this.levelflat = game.add.image(0, 0, 'levelflat');
 
         //  Un-comment this on to see the collision tiles
         //this.layer.debug = true;
@@ -116,6 +124,7 @@ var gameState = {
         this.enemies = [];
 
         for (var e = 0; e < gameData.settings.enemies.spawnpoints.length; e++) {
+        //for (var e = 0; e < 1; e++) {
             var spawnpoint = gameData.settings.enemies.spawnpoints[e];
             var enemy = game.add.sprite(spawnpoint.x, spawnpoint.y, 'enemy', 1);
             enemy.animations.add('left', [8,9], 10, true);
@@ -138,6 +147,8 @@ var gameState = {
 
             this.enemies.push(enemy);
         }
+
+        //game.camera.follow(this.enemies[0]);
 
         this.enemyEmitter = game.add.emitter(this.player.position.x, this.player.position.y, 200);
         this.enemyEmitter.makeParticles('greengibs', [0,1,2,3,4], 200, true, true);
@@ -541,6 +552,7 @@ var gameState = {
         this.text = undefined;
         this.map = undefined;
         this.layer = undefined;
+        this.levelflat = undefined;
         this.cursors = undefined;
         this.player = undefined;
         this.enemies = undefined;
@@ -559,6 +571,13 @@ var gameState = {
         this.score = undefined;
         this.scoreText = undefined;
 
+    },
+
+    render: function () {
+
+        //game.debug.text('FPS: ' + game.time.fps, 32, 32, "#ffffff");
+        //game.debug.spriteInfo(this.player, 32, 64);
+        //game.debug.spriteInfo(this.enemy, 496, 64);
     }
 
 };
