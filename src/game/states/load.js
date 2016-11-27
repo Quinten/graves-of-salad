@@ -28,6 +28,10 @@ var loadState = {
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
         game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
         game.load.image('startscreen', 'assets/sprites/startscreen.png');
+        game.load.image('dpad', 'assets/controls/dpad.png');
+        game.load.image('touchsegment', 'assets/controls/touchsegment.png');
+        game.load.image('touch', 'assets/controls/touch.png')
+
     },
 
     create: function () {

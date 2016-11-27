@@ -92,6 +92,10 @@ var gameState = {
 
         this.cursors = game.input.keyboard.createCursorKeys();
 
+        game.touchControl = this.game.plugins.add(Phaser.Plugin.TouchControl);
+        game.touchControl.settings.singleDirection = true;
+        game.touchControl.inputEnable();
+
         //  Our bullet group
         this.bullets = game.add.group();
         this.bullets.enableBody = true;
@@ -219,22 +223,22 @@ var gameState = {
 
         this.player.body.velocity.set(0);
 
-        if (this.cursors.left.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
+        if (this.cursors.left.isDown || game.touchControl.cursors.left || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
             this.player.body.velocity.x = -100;
             this.player.play('left');
             this.player.facing = 'left';
             this.usedCursors = true;
-        } else if (this.cursors.right.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
+        } else if (this.cursors.right.isDown || game.touchControl.cursors.right || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
             this.player.body.velocity.x = 100;
             this.player.play('right');
             this.player.facing = 'right';
             this.usedCursors = true;
-        } else if (this.cursors.up.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
+        } else if (this.cursors.up.isDown || game.touchControl.cursors.up || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
             this.player.body.velocity.y = -100;
             this.player.play('up');
             this.player.facing = 'up';
             this.usedCursors = true;
-        } else if (this.cursors.down.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
+        } else if (this.cursors.down.isDown || game.touchControl.cursors.down || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
             this.player.body.velocity.y = 100;
             this.player.play('down');
             this.player.facing = 'down';
@@ -254,7 +258,7 @@ var gameState = {
             }, this);
         }
 
-        if (this.player.alive && (this.ammo > 0) && (this.spaceKey.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A))) {
+        if (this.player.alive && (this.ammo > 0) && (this.spaceKey.isDown || game.touchControl.cursors.space || pad1.justPressed(Phaser.Gamepad.XBOX360_A))) {
             if (game.time.now > this.nextFire && this.bullets.countDead() > 0)
             {
                 this.nextFire = game.time.now + this.fireRate;
@@ -294,7 +298,7 @@ var gameState = {
             }
         }
 
-        if (!this.player.alive && (this.spaceKey.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A)) && this.playerCanBeRevived) {
+        if (!this.player.alive && (this.spaceKey.isDown || game.input.pointer1.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A)) && this.playerCanBeRevived) {
             this.revivePlayer();
         }
 
