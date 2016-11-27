@@ -57,6 +57,9 @@ var menuState = {
         game.scale.startFullScreen(false);
         this.switched = true;
         game.state.start('game');
+        music.loopFull();
+        fx.play('silence');
+        fxtwo.play('silencetwo');
 
     },
 
