@@ -104,6 +104,174 @@ Pathfinding.prototype.get_point_from_coord = function (coord) {
     return new Phaser.Point(x, y);
 };
 
+(function(window, Phaser) {
+    'use strict';
+    /**
+      * TouchControl Plugin for Phaser
+      * Loosely based on https://github.com/Gamegur-us/phaser-touch-control-plugin
+      */
+    Phaser.Plugin.TouchControl = function (game, parent) {
+
+        Phaser.Plugin.call(this, game, parent);
+        this.input = this.game.input;
+
+        this.imageGroup = [];
+
+        this.imageGroup.push(this.game.add.sprite(0, 0, 'dpad'));
+        this.imageGroup.push(this.game.add.sprite(0, 0, 'touchsegment'));
+        this.imageGroup.push(this.game.add.sprite(0, 0, 'touchsegment'));
+        this.imageGroup.push(this.game.add.sprite(0, 0, 'touch'));
+
+        this.imageGroup.forEach(function (e) {
+            e.anchor.set(0.5);
+            e.visible = false;
+            e.fixedToCamera = true;
+        });
+
+        this.spaceSprite = this.game.add.sprite(0, 0, 'touch');
+        this.spaceSprite.anchor.set(0.5);
+        this.spaceSprite.visible = false;
+        this.spaceSprite.fixedToCamera = true;
+
+    };
+
+    Phaser.Plugin.TouchControl.prototype = Object.create(Phaser.Plugin.prototype);
+    Phaser.Plugin.TouchControl.prototype.constructor = Phaser.Plugin.TouchControl;
+
+    Phaser.Plugin.TouchControl.prototype.settings = {
+        // max distance from initial touch
+        maxDistanceInPixels: 200,
+        singleDirection: false
+    };
+
+    Phaser.Plugin.TouchControl.prototype.cursors = {
+        up: false, down: false, left: false, right: false, space: false
+    };
+
+    Phaser.Plugin.TouchControl.prototype.speed = {
+        x:0, y:0
+    };
+
+    Phaser.Plugin.TouchControl.prototype.inputEnable = function() {
+        this.input.onDown.add(createCompass, this);
+        //this.input.onUp.add(removeCompass, this);
+    };
+
+    Phaser.Plugin.TouchControl.prototype.inputDisable = function() {
+        this.input.onDown.remove(createCompass, this);
+        //this.input.onUp.remove(removeCompass, this);
+    };
+
+    var initialPoint;
+    var compassActive = false;
+    var createCompass = function () {
+
+        if (!this.compassActive && this.input.pointer1.isDown) {
+
+            this.compassActive = true;
+
+            this.imageGroup.forEach(function (e) {
+
+                e.visible = true;
+                e.bringToTop();
+
+                //e.cameraOffset.x = this.input.pointer1.worldX;
+                //e.cameraOffset.y = this.input.pointer1.worldY;
+
+            }, this);
+
+            this.spaceSprite.bringToTop();
+
+            this.preUpdate = setDirection.bind(this);
+
+            initialPoint = this.input.pointer1.position.clone();
+
+        }
+
+    };
+
+    var removeCompass = function (that) {
+
+        that.imageGroup.forEach(function(e){
+            e.visible = false;
+        });
+
+        that.spaceSprite.visible = false;
+
+        that.cursors.up = false;
+        that.cursors.down = false;
+        that.cursors.left = false;
+        that.cursors.right = false;
+        that.cursors.space = false;
+
+        that.speed.x = 0;
+        that.speed.y = 0;
+
+        that.preUpdate = empty;
+
+        that.compassActive = false;
+
+    };
+
+    var empty = function() { };
+
+    var setDirection = function() {
+
+        if (!this.input.pointer1.isDown) {
+            removeCompass(this);
+            return;
+        }
+
+        var d = initialPoint.distance(this.input.pointer1.position);
+        var maxDistanceInPixels = this.settings.maxDistanceInPixels;
+
+        var deltaX = this.input.pointer1.position.x - initialPoint.x;
+        var deltaY = this.input.pointer1.position.y - initialPoint.y;
+
+        if (this.settings.singleDirection) {
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                deltaY = 0;
+                this.input.pointer1.position.y = initialPoint.y;
+            } else {
+                deltaX = 0;
+                this.input.pointer1.position.x = initialPoint.x;
+            }
+        }
+        var angle = initialPoint.angle(this.input.pointer1.position);
+
+
+        if (d > maxDistanceInPixels) {
+            deltaX = (deltaX === 0) ? 0 : Math.cos(angle) * maxDistanceInPixels;
+            deltaY = (deltaY === 0) ? 0 : Math.sin(angle) * maxDistanceInPixels;
+        }
+
+        this.speed.x = parseInt((deltaX / maxDistanceInPixels) * 100 * -1, 10);
+        this.speed.y = parseInt((deltaY / maxDistanceInPixels) * 100 * -1, 10);
+
+        this.cursors.up = (deltaY < -8);
+        this.cursors.down = (deltaY > 8);
+        this.cursors.left = (deltaX < -8);
+        this.cursors.right = (deltaX > 8);
+        this.cursors.space = this.input.pointer2.isDown;
+
+        if (this.cursors.space) {
+            this.spaceSprite.visible = true;
+            this.spaceSprite.cameraOffset.x = this.input.pointer2.screenX;
+            this.spaceSprite.cameraOffset.y = this.input.pointer2.screenY;
+        } else {
+            this.spaceSprite.visible = false;
+        }
+
+        this.imageGroup.forEach(function(e,i){
+            e.cameraOffset.x = initialPoint.x + (deltaX) * i / 3;
+            e.cameraOffset.y = initialPoint.y + (deltaY) * i / 3;
+        }, this);
+
+    };
+    Phaser.Plugin.TouchControl.prototype.preUpdate = empty;
+
+}(window, Phaser));
+
 var bootState = {
 
     create: function () {
@@ -223,6 +391,10 @@ var gameState = {
         game.camera.follow(this.player);
 
         this.cursors = game.input.keyboard.createCursorKeys();
+
+        game.touchControl = this.game.plugins.add(Phaser.Plugin.TouchControl);
+        game.touchControl.settings.singleDirection = true;
+        game.touchControl.inputEnable();
 
         //  Our bullet group
         this.bullets = game.add.group();
@@ -351,22 +523,22 @@ var gameState = {
 
         this.player.body.velocity.set(0);
 
-        if (this.cursors.left.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
+        if (this.cursors.left.isDown || game.touchControl.cursors.left || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1) {
             this.player.body.velocity.x = -100;
             this.player.play('left');
             this.player.facing = 'left';
             this.usedCursors = true;
-        } else if (this.cursors.right.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
+        } else if (this.cursors.right.isDown || game.touchControl.cursors.right || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) > 0.1) {
             this.player.body.velocity.x = 100;
             this.player.play('right');
             this.player.facing = 'right';
             this.usedCursors = true;
-        } else if (this.cursors.up.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
+        } else if (this.cursors.up.isDown || game.touchControl.cursors.up || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_UP) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) < -0.1) {
             this.player.body.velocity.y = -100;
             this.player.play('up');
             this.player.facing = 'up';
             this.usedCursors = true;
-        } else if (this.cursors.down.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
+        } else if (this.cursors.down.isDown || game.touchControl.cursors.down || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN) || pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_Y) > 0.1) {
             this.player.body.velocity.y = 100;
             this.player.play('down');
             this.player.facing = 'down';
@@ -386,7 +558,7 @@ var gameState = {
             }, this);
         }
 
-        if (this.player.alive && (this.ammo > 0) && (this.spaceKey.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A))) {
+        if (this.player.alive && (this.ammo > 0) && (this.spaceKey.isDown || game.touchControl.cursors.space || pad1.justPressed(Phaser.Gamepad.XBOX360_A))) {
             if (game.time.now > this.nextFire && this.bullets.countDead() > 0)
             {
                 this.nextFire = game.time.now + this.fireRate;
@@ -426,7 +598,7 @@ var gameState = {
             }
         }
 
-        if (!this.player.alive && (this.spaceKey.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A)) && this.playerCanBeRevived) {
+        if (!this.player.alive && (this.spaceKey.isDown || game.input.pointer1.isDown || pad1.justPressed(Phaser.Gamepad.XBOX360_A)) && this.playerCanBeRevived) {
             this.revivePlayer();
         }
 
@@ -744,6 +916,10 @@ var loadState = {
         game.load.spritesheet('enemy', 'assets/sprites/salad.png', 16, 16);
         game.load.spritesheet('greengibs', 'assets/sprites/greengibs.png', 6, 6);
         game.load.image('startscreen', 'assets/sprites/startscreen.png');
+        game.load.image('dpad', 'assets/controls/dpad.png');
+        game.load.image('touchsegment', 'assets/controls/touchsegment.png');
+        game.load.image('touch', 'assets/controls/touch.png')
+
     },
 
     create: function () {
