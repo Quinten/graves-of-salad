@@ -162,7 +162,7 @@ var gameState = {
         this.enemyEmitter.bounce.setTo(0.5, 0.5);
         this.enemyEmitter.angularDrag = 30;
 
-        var text = this.text = game.add.text(game.camera.width / 2, (game.camera.height / 2) - 48, "Arrows to move");
+        var text = this.text = game.add.text(game.camera.width / 2, (game.camera.height / 2) - 48, (game.device.touch) ? "Drag to move" : "Arrows to move");
         text.anchor.setTo(0.5,0.5);
         text.font = fontName;
         text.fontSize = 32;
@@ -252,7 +252,7 @@ var gameState = {
             this.hiddenCursorInfo = true;
             game.time.events.add(Phaser.Timer.SECOND * 8, function () {
                 this.text.fill = '#f7a506';
-                this.text.text = 'Space to shoot';
+                this.text.text = (game.device.touch) ? 'Second finger to shoot' : 'Space to shoot';
                 this.text.visible = true;
                 this.hiddenSpacebarInfo = false;
             }, this);
@@ -489,7 +489,7 @@ var gameState = {
 
         game.time.events.add(Phaser.Timer.SECOND * 8, function () {
             this.text.fill = '#80649b';
-            this.text.text = 'Space to play again';
+            this.text.text = (game.device.touch) ? 'Tap to play again' : 'Space to play again';
             // if it is visible then it is
         }, this);
 

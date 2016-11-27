@@ -13,7 +13,7 @@ var menuState = {
         this.menuGroup.y = game.world.centerY;
 
         var textsprite = this.menuGroup.add(this.createText(0, -142, 'Graves of salad', '#6b9541', 42));
-        this.textstart = this.menuGroup.add(this.createText(0, 142, 'press space', colors.normalStroke, 20));
+        this.textstart = this.menuGroup.add(this.createText(0, 142, (game.device.touch) ? 'tap anywhere' : 'press space', colors.normalStroke, 20));
 
         var startimage = this.menuGroup.add(game.add.sprite(0, 0, 'startscreen'));
         startimage.anchor.setTo(0.5);
