@@ -929,11 +929,13 @@ var loadState = {
         fx.addMarker('player_explosion', 1, 6);
         fx.addMarker('enemy_explosion', 8, 1);
         fx.addMarker('bullet', 10, 0.5);
+        fx.addMarker('silence', 12, 1);
 
         fxtwo = game.add.audio('sfxtwo');
         fxtwo.allowMultiple = true;
         fxtwo.addMarker('splat', 1, 1);
         fxtwo.addMarker('healthup', 3, 1);
+        fxtwo.addMarker('silencetwo', 5, 1);
         // ...
 
 
@@ -1015,6 +1017,9 @@ var menuState = {
         game.scale.startFullScreen(false);
         this.switched = true;
         game.state.start('game');
+        music.loopFull();
+        fx.play('silence');
+        fxtwo.play('silencetwo');
 
     },
 
