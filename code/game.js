@@ -1109,7 +1109,8 @@ var music;
 
 var fx;
 var fxtwo;
-window.PhaserGlobal = { disableWebAudio: true };
+var audioFallback = (Phaser.Device.isAndroidStockBrowser()) ? true : false;
+window.PhaserGlobal = { disableWebAudio: audioFallback };
 
 // http://www.colourlovers.com/palette/164182/Octobers_End
 // ash: b9b68e, pumpkin: c98c30, orange: c95b30, purple: 80649b, dark-grey: 3e3d41
